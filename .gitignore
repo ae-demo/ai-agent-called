@@ -1,0 +1,15 @@
+# crash artefacts — never wanted, in any component
+core
+!core/
+core.[0-9]*
+hs_err_pid*.log
+replay_pid*.log
+
+# library-service (Ballerina)
+/library-service/target/
+/library-service/generated/
+/library-service/Config.toml
+
+# book-buddy (TypeScript)
+/book-buddy/node_modules/
+/book-buddy/dist/
