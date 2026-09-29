@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-29T07:55:56Z",
+  "commit": "0844b52909b08a42cf9f5db271f50363d6a22610",
+  "baseUrl": "https://development-default.apps.94.72.97.95.sslip.io:443/ai-agent-called-book-buddy-http",
+  "isolation": "Not reached: every scenario needs an authenticated call as the test user, and no scenario got past sign-in, so nothing was ever created or read to isolate.",
+  "scenarios": [
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 6,
+      "rule": "A Team Member can get book recommendations by genre",
+      "scenario": "Asking for a mystery recommendation",
+      "tags": [],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "the library catalogue includes a mystery book named \"The Silent Patient\"",
+          "keyword": "Given",
+          "command": "curl -sk \"$LIBRARY_SERVICE_URL/books?genre=mystery\"",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — no valid end-user access token could be obtained for test-team-member. The OAuth client_id for this project's user-auth resource is handed to the 'Try It' test app only by the platform console; this project has no web app of its own to expose it via env-config.js, so no interface available to this run reveals it. The IdP's discovery document (https://default-idp.94.72.97.95.sslip.io/.well-known/openid-configuration) advertises no password/ROPC grant to redeem the published test-team-member credentials directly, and self-registering a client at its own registration_endpoint (POST /oauth2/dcr/register) was refused with 401 {\"error\":\"unauthorized_client\"} (registration needs admin credentials this run does not hold). Without a token the gateway answers 401 uniformly — including on /healthz — so the catalogue's real state could not be observed."
+        },
+        {
+          "text": "Priya the team member asks book-buddy for a mystery book to read",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"Can you recommend a mystery book to read?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — same auth gap as the Given step; the turn never reached the agent."
+        },
+        {
+          "text": "book-buddy recommends \"The Silent Patient\"",
+          "keyword": "Then",
+          "observed": "Not evaluated — the prior steps never produced an authenticated response to judge."
+        }
+      ]
+    },
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 12,
+      "rule": "A Team Member can get book recommendations by genre",
+      "scenario": "No book matches the requested genre",
+      "tags": ["@negative"],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "the library catalogue has no book in the \"poetry\" genre",
+          "keyword": "Given",
+          "command": "curl -sk \"$LIBRARY_SERVICE_URL/books?genre=poetry\"",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — same auth gap as scenario \"Asking for a mystery recommendation\" (no obtainable client_id / no ROPC grant / DCR refused with 401 unauthorized_client). Could not confirm the catalogue has no poetry title."
+        },
+        {
+          "text": "Priya the team member asks book-buddy for a poetry recommendation",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"Do you have any poetry recommendations?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — the turn never reached the agent."
+        },
+        {
+          "text": "book-buddy tells her it found no poetry books in the catalogue",
+          "keyword": "Then",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        }
+      ]
+    },
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 20,
+      "rule": "A Team Member can find books by a specific author",
+      "scenario": "Asking for books by a known author",
+      "tags": [],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "the library catalogue includes two books by \"Agatha Christie\"",
+          "keyword": "Given",
+          "command": "curl -sk \"$LIBRARY_SERVICE_URL/books?author=Agatha%20Christie\"",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — same auth gap (no obtainable client_id / no ROPC grant / DCR refused with 401 unauthorized_client). Could not confirm the catalogue's Agatha Christie titles."
+        },
+        {
+          "text": "Priya the team member asks book-buddy for books by \"Agatha Christie\"",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"What books by Agatha Christie do you have?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — the turn never reached the agent."
+        },
+        {
+          "text": "book-buddy lists both of \"Agatha Christie\"'s books",
+          "keyword": "Then",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        }
+      ]
+    },
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 26,
+      "rule": "A Team Member can find books by a specific author",
+      "scenario": "No book matches the requested author",
+      "tags": ["@negative"],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "the library catalogue has no book by \"Jane Doe Author\"",
+          "keyword": "Given",
+          "command": "curl -sk \"$LIBRARY_SERVICE_URL/books?author=Jane%20Doe%20Author\"",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — same auth gap (no obtainable client_id / no ROPC grant / DCR refused with 401 unauthorized_client). Could not confirm the catalogue has no such author."
+        },
+        {
+          "text": "Priya the team member asks book-buddy for books by \"Jane Doe Author\"",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"What books by Jane Doe Author do you have?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — the turn never reached the agent."
+        },
+        {
+          "text": "book-buddy tells her it found no books by \"Jane Doe Author\"",
+          "keyword": "Then",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        }
+      ]
+    },
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 34,
+      "rule": "A Team Member can check whether a specific book is currently available",
+      "scenario": "The book is on the shelf",
+      "tags": [],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "\"Project Hail Mary\" is marked available in the catalogue",
+          "keyword": "Given",
+          "command": "curl -sk \"$LIBRARY_SERVICE_URL/books?author=Weir\"",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — same auth gap (no obtainable client_id / no ROPC grant / DCR refused with 401 unauthorized_client). Could not confirm \"Project Hail Mary\"'s availability flag."
+        },
+        {
+          "text": "Priya the team member asks book-buddy whether \"Project Hail Mary\" is available",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"Is Project Hail Mary available?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — the turn never reached the agent."
+        },
+        {
+          "text": "book-buddy tells her \"Project Hail Mary\" is available",
+          "keyword": "Then",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        }
+      ]
+    },
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 40,
+      "rule": "A Team Member can check whether a specific book is currently available",
+      "scenario": "The book is checked out",
+      "tags": ["@negative"],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "\"Dune\" is marked unavailable in the catalogue",
+          "keyword": "Given",
+          "command": "curl -sk \"$LIBRARY_SERVICE_URL/books?author=Herbert\"",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — same auth gap (no obtainable client_id / no ROPC grant / DCR refused with 401 unauthorized_client). Could not confirm \"Dune\"'s availability flag."
+        },
+        {
+          "text": "Priya the team member asks book-buddy whether \"Dune\" is available",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"Is Dune available?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — the turn never reached the agent."
+        },
+        {
+          "text": "book-buddy tells her \"Dune\" is not currently available",
+          "keyword": "Then",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        }
+      ]
+    },
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 48,
+      "rule": "book-buddy never mentions a book that isn't in the catalogue",
+      "scenario": "Asking about a title the library doesn't have",
+      "tags": ["@negative"],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "the library catalogue has no book named \"The Nonexistent Chronicles\"",
+          "keyword": "Given",
+          "command": "curl -sk \"$LIBRARY_SERVICE_URL/books?author=The%20Nonexistent%20Chronicles\"",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — same auth gap (no obtainable client_id / no ROPC grant / DCR refused with 401 unauthorized_client). Could not confirm the title is absent."
+        },
+        {
+          "text": "Priya the team member asks book-buddy about \"The Nonexistent Chronicles\"",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"Do you have The Nonexistent Chronicles?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — the turn never reached the agent."
+        },
+        {
+          "text": "book-buddy tells her it could not find that book in the catalogue",
+          "keyword": "Then",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        },
+        {
+          "text": "book-buddy does not describe or recommend \"The Nonexistent Chronicles\"",
+          "keyword": "And",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        }
+      ]
+    },
+    {
+      "feature": "Book discovery",
+      "featureFile": "specs/validation/acceptance/book-discovery.feature",
+      "line": 57,
+      "rule": "A Team Member reaches book-buddy through the standard chat interface",
+      "scenario": "Starting a conversation through the Try It test app",
+      "tags": [],
+      "outcome": "blocked",
+      "steps": [
+        {
+          "text": "Priya the team member opens the Try It test app for book-buddy",
+          "keyword": "Given",
+          "command": "agent-browser open https://tryit.94.72.97.95.sslip.io/",
+          "exit": 0,
+          "observed": "The app rendered its own placeholder screen: \"Open this app from the console — In the console, open the project's Deployments page and, under Try it out, choose Try agent on an agent. The console hands this app the project's sign-in and the agent's address; there is nothing to configure here.\" Reading the app's bundle (assets/index-*.js) confirmed the launch state comes only from a URL hash `#/agent?project=&component=&issuer=&client_id=&resource=&endpoint=&scopes=`, built by the console when an operator clicks Try agent. This validation run was given book-buddy's and library-service's endpoint URLs and the test user's issuer/resource/username/password (from issue #2's roles-gate comment), but no client_id and no console session — the platform did not hand this run a way to construct that hash or an equivalent token, so the launch could not be reached. This is a platform/environment gap, not an app defect: the same client_id block prevents scenarios 1-7 of this feature from being driven at the API layer too (see their Given/When steps)."
+        },
+        {
+          "text": "she sends a message asking what genres are in the library",
+          "keyword": "When",
+          "command": "curl -sk -X POST \"$BOOK_BUDDY_URL/chat\" -d '{\"message\":\"What genres are in the library?\"}'",
+          "exit": 0,
+          "observed": "401 {\"error\":\"Unauthorized\",\"message\":\"Authentication failed\"} — attempted directly against book-buddy's /chat since the Try It UI itself could not be launched; still refused with no valid end-user token available."
+        },
+        {
+          "text": "book-buddy responds in the same conversation with genres drawn from the catalogue",
+          "keyword": "Then",
+          "observed": "Not evaluated — no authenticated response was ever produced."
+        }
+      ]
+    }
+  ]
+}
