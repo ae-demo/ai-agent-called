@@ -7,10 +7,37 @@
   "appPath": "library-service",
   "entrypoint": "deployment/service",
   "exposure": "intranet",
-  "dependencies": [
-    { "kind": "platform-resource", "name": "user-auth", "resourceType": "thunder-app" }
+  "stories": [
+    1,
+    2,
+    3,
+    4
   ],
   "description": "Holds the team library's fixed in-memory catalogue of about 15 books (title, author, genre, year, available) and serves two read-only lookups: searchBooks (GET /books, optional genre/author filters) and getBook (GET /books/{id}). Never adds, edits, removes, or persists a book — the catalogue is seeded once at startup and there is no database. Called only by book-buddy on behalf of a signed-in Team Member; it never runs a checkout or reservation workflow.",
-  "stories": [1, 2, 3, 4],
-  "skillsPinned": ["openapi-conventions", "ballerina", "thunder-authentication", "api-management"]
+  "dependencies": [
+    {
+      "kind": "platform-resource",
+      "name": "user-auth",
+      "resourceType": "thunder-app",
+      "wiring": {
+        "ref": "ai-agent-called-user-auth",
+        "envBindings": {
+          "client_id": "USER_AUTH_CLIENT_ID",
+          "issuer": "USER_AUTH_ISSUER",
+          "jwks_url": "USER_AUTH_JWKS_URL",
+          "resource": "USER_AUTH_RESOURCE",
+          "scopes": "USER_AUTH_SCOPES"
+        }
+      }
+    }
+  ],
+  "exposesAPI": {
+    "auth": "end-user-required"
+  },
+  "skillsPinned": [
+    "openapi-conventions",
+    "ballerina",
+    "thunder-authentication",
+    "api-management"
+  ]
 }
