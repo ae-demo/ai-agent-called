@@ -1,0 +1,17 @@
+{
+  "name": "book-buddy",
+  "type": "ai-agent",
+  "version": "0.1.0",
+  "language": "TypeScript",
+  "buildpack": "docker",
+  "appPath": "book-buddy",
+  "entrypoint": "deployment/ai-agent",
+  "exposure": "internet",
+  "dependencies": [
+    { "kind": "component", "name": "library-service", "description": "Looks up books by genre/author and checks a specific book's availability, via searchBooks and getBook only." },
+    { "kind": "platform-resource", "name": "user-auth", "resourceType": "thunder-app" }
+  ],
+  "description": "Conversational agent that helps a Team Member discover books in the team library — recommending titles by genre or author and reporting whether a specific book is currently available. Its tool allow-list is limited to library-service's searchBooks and getBook operations, so it can never mention a book that isn't really in the catalogue and never changes any book's state. Reached through the standard /chat interface via the Try It test app; there is no web application in this project.",
+  "stories": [1, 2, 3, 4, 5],
+  "skillsPinned": ["agent-building", "thunder-authentication"]
+}

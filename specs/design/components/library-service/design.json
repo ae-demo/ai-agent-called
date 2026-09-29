@@ -1,0 +1,16 @@
+{
+  "name": "library-service",
+  "type": "service",
+  "version": "0.1.0",
+  "language": "Ballerina",
+  "buildpack": "docker",
+  "appPath": "library-service",
+  "entrypoint": "deployment/service",
+  "exposure": "intranet",
+  "dependencies": [
+    { "kind": "platform-resource", "name": "user-auth", "resourceType": "thunder-app" }
+  ],
+  "description": "Holds the team library's fixed in-memory catalogue of about 15 books (title, author, genre, year, available) and serves two read-only lookups: searchBooks (GET /books, optional genre/author filters) and getBook (GET /books/{id}). Never adds, edits, removes, or persists a book — the catalogue is seeded once at startup and there is no database. Called only by book-buddy on behalf of a signed-in Team Member; it never runs a checkout or reservation workflow.",
+  "stories": [1, 2, 3, 4],
+  "skillsPinned": ["openapi-conventions", "ballerina", "thunder-authentication", "api-management"]
+}

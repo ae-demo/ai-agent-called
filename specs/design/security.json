@@ -1,0 +1,28 @@
+{
+  "version": 3,
+  "permissions": [
+    {
+      "resource": "books",
+      "component": "library-service",
+      "description": "The team library's book catalogue",
+      "actions": [
+        { "handle": "read", "description": "Search the catalogue and read any book's detail and availability" }
+      ]
+    }
+  ],
+  "groups": [
+    { "name": "TeamMembers", "description": "Everyone on the team who may look up books in the shared library" }
+  ],
+  "roles": [
+    {
+      "name": "TeamMember",
+      "description": "Chats with book-buddy to discover books, get recommendations, and check availability.",
+      "stories": [1, 2, 3, 4, 5],
+      "grants": ["books:read"],
+      "assignTo": ["TeamMembers"]
+    }
+  ],
+  "testUsers": [
+    { "username": "test-team-member", "roles": ["TeamMember"] }
+  ]
+}
