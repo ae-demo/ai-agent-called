@@ -1,0 +1,4 @@
+apiVersion = "agentic-engineer/v1"
+name = "ai-agent-called"
+createdAt = "2026-09-29T06:49:13Z"
+idea = "Build an AI agent called book-buddy that helps people find books in a small team library. It is backed by one backend service, library-service, which keeps an in-memory catalogue of about 15 books (title, author, genre, year, available true/false). No database and no web app.\n library-service exposes: - GET /books (operationId searchBooks), with optional genre and author filters\n - GET /books/{id} (operationId getBook)\n\nThe agent's allow-list is searchBooks and getBook only. It recommends books by genre or author, tells the user whether a book is currently available, and never invents titles that aren't in the catalogue. Users talk to it through the standard /chat interface via the Try it test app."
